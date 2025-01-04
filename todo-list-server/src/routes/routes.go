@@ -16,4 +16,5 @@ func HandleRequests(r *gin.Engine, db *gorm.DB) {
 	r.GET("/health", controllers.Health)
 
 	r.POST("/api/v1/workspaces", workspaceController.Create)
+	r.GET("/api/v1/workspaces", workspaceController.Get)
 }

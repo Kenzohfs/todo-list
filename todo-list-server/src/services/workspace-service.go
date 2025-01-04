@@ -16,3 +16,7 @@ func NewWorkspaceService(workspaceRepo *repos.WorkspaceRepo) *WorkspaceService {
 func (s *WorkspaceService) Create(workspace *models.Workspace) {
 	s.workspaceRepo.Create(workspace)
 }
+
+func (r *WorkspaceService) Get(page int, perPage int, sortBy string, sortDirection string, filter string) *[]models.Workspace {
+	return r.workspaceRepo.Get(page, perPage, sortBy, sortDirection, filter)
+}

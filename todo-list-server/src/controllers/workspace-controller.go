@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kenzohfs/m/src/models"
@@ -28,4 +30,19 @@ func (c *WorkspaceController) Create(ctx *gin.Context) {
 
 	c.workspaceService.Create(&workspace)
 	ctx.JSON(http.StatusCreated, workspace)
+}
+
+func (c *WorkspaceController) Get(ctx *gin.Context) {
+	pageQuery := ctx.Query("page")
+	perPageQuery := ctx.Query("perPage")
+	sortBy := ctx.Query("sortBy")
+	sortDirection := ctx.Query("sortDirection")
+	filter := ctx.Query("filter")
+
+	page, _ := strconv.Atoi(pageQuery)
+	perPage, _ := strconv.Atoi(perPageQuery)
+
+	result := c.workspaceService.Get(page, perPage, sortBy, sortDirection, filter)
+
+	ctx.JSON(http.StatusOK, result)
 }
