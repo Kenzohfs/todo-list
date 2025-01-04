@@ -24,3 +24,10 @@ func (r *WorkspaceRepo) Get(page int, perPage int, sortBy string, sortDirection 
 
 	return &workspaces
 }
+
+func (r *WorkspaceRepo) GetById(id uint) *models.Workspace {
+	var result models.Workspace
+	r.db.First(&result, id)
+
+	return &result
+}

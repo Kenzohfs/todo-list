@@ -20,3 +20,7 @@ func (s *WorkspaceService) Create(workspace *models.Workspace) {
 func (r *WorkspaceService) Get(page int, perPage int, sortBy string, sortDirection string, filter string) *[]models.Workspace {
 	return r.workspaceRepo.Get(page, perPage, sortBy, sortDirection, filter)
 }
+
+func (r *WorkspaceService) GetById(id uint) *models.Workspace {
+	return r.workspaceRepo.GetById(id)
+}

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -18,20 +18,6 @@ func NewWorkspaceController(workspaceService *services.WorkspaceService) *Worksp
 	return &WorkspaceController{workspaceService: workspaceService}
 }
 
-func (c *WorkspaceController) Create(ctx *gin.Context) {
-	var workspace models.Workspace
-
-	if err := ctx.ShouldBindBodyWithJSON(&workspace); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	c.workspaceService.Create(&workspace)
-	ctx.JSON(http.StatusCreated, workspace)
-}
-
 func (c *WorkspaceController) Get(ctx *gin.Context) {
 	pageQuery := ctx.Query("page")
 	perPageQuery := ctx.Query("perPage")
@@ -45,4 +31,33 @@ func (c *WorkspaceController) Get(ctx *gin.Context) {
 	result := c.workspaceService.Get(page, perPage, sortBy, sortDirection, filter)
 
 	ctx.JSON(http.StatusOK, result)
+}
+
+func (c *WorkspaceController) GetById(ctx *gin.Context) {
+	idParam := ctx.Param("workspaceId")
+
+	id, _ := strconv.Atoi(idParam)
+
+	workspace := c.workspaceService.GetById(uint(id))
+
+	if workspace.ID == 0 {
+		ctx.JSON(http.StatusNotFound, nil)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, workspace)
+}
+
+func (c *WorkspaceController) Create(ctx *gin.Context) {
+	var workspace models.Workspace
+
+	if err := ctx.ShouldBindBodyWithJSON(&workspace); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.workspaceService.Create(&workspace)
+	ctx.JSON(http.StatusCreated, workspace)
 }
