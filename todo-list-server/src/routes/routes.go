@@ -15,7 +15,7 @@ func HandleRequests(r *gin.Engine, db *gorm.DB) {
 
 	taskRepo := repos.NewTaskRepo(db)
 	taskService := services.NewTaskService(taskRepo)
-	taskController := controllers.NewTaskController(taskService)
+	taskController := controllers.NewTaskController(taskService, workspaceService)
 
 	r.GET("/health", controllers.Health)
 

@@ -1,6 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gopkg.in/validator.v2"
+	"gorm.io/gorm"
+)
 
 type TaskStatus string
 
@@ -11,8 +14,16 @@ const (
 
 type Task struct {
 	gorm.Model
-	Desc        string     `json:"desc"`
-	Status      TaskStatus `json:"status"`
+	Desc        string     `json:"desc" validate:"nonzero"`
+	Status      TaskStatus `json:"status" validate:"nonzero"`
 	WorkspaceID int
 	Workspace   Workspace
+}
+
+func (m *Task) Validate() error {
+	if err := validator.Validate(m); err != nil {
+		return err
+	}
+
+	return nil
 }
