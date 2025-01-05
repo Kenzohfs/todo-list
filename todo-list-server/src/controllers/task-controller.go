@@ -53,6 +53,17 @@ func (c *TaskController) Create(ctx *gin.Context) {
 }
 
 func (c *TaskController) Get(ctx *gin.Context) {
+	idParam := ctx.Param("workspaceId")
+	id, _ := strconv.Atoi(idParam)
+
+	workspace := c.workspaceService.GetById(uint(id))
+	if workspace.ID == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": "workspace not found",
+		})
+		return
+	}
+
 	pageQuery := ctx.Query("page")
 	perPageQuery := ctx.Query("perPage")
 	sortBy := ctx.Query("sortBy")
@@ -66,4 +77,52 @@ func (c *TaskController) Get(ctx *gin.Context) {
 	result := c.taskService.Get(page, perPage, sortBy, sortDirection, filter, status)
 
 	ctx.JSON(http.StatusOK, result)
+}
+
+func (c *TaskController) Edit(ctx *gin.Context) {
+	taskIdParam := ctx.Param("taskId")
+	taskId, _ := strconv.Atoi(taskIdParam)
+
+	task := c.taskService.GetById(uint(taskId))
+
+	if task.ID == 0 {
+		ctx.JSON(http.StatusNotFound, nil)
+		return
+	}
+
+	if err := ctx.ShouldBindJSON(&task); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := task.Validate(); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.taskService.Edit(task)
+	ctx.JSON(http.StatusOK, task)
+}
+
+func (c *TaskController) Delete(ctx *gin.Context) {
+	workspaceIdParam := ctx.Param("workspaceId")
+	workspaceId, _ := strconv.Atoi(workspaceIdParam)
+
+	workspace := c.workspaceService.GetById(uint(workspaceId))
+	if workspace.ID == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error": "workspace not found",
+		})
+		return
+	}
+
+	taskIdParam := ctx.Param("taskId")
+	taskId, _ := strconv.Atoi(taskIdParam)
+
+	c.taskService.Delete(uint(taskId))
+	ctx.JSON(http.StatusNoContent, nil)
 }

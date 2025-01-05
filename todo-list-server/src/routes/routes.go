@@ -25,4 +25,6 @@ func HandleRequests(r *gin.Engine, db *gorm.DB) {
 
 	r.POST("/api/v1/workspaces/:workspaceId/tasks", taskController.Create)
 	r.GET("/api/v1/workspaces/:workspaceId/tasks", taskController.Get)
+	r.DELETE("/api/v1/workspaces/:workspaceId/tasks/:taskId", taskController.Delete)
+	r.PUT("/api/v1/workspaces/:workspaceId/tasks/:taskId", taskController.Edit)
 }
