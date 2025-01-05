@@ -24,4 +24,5 @@ func HandleRequests(r *gin.Engine, db *gorm.DB) {
 	r.GET("/api/v1/workspaces/:workspaceId", workspaceController.GetById)
 
 	r.POST("/api/v1/workspaces/:workspaceId/tasks", taskController.Create)
+	r.GET("/api/v1/workspaces/:workspaceId/tasks", taskController.Get)
 }

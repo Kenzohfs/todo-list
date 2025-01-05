@@ -51,3 +51,19 @@ func (c *TaskController) Create(ctx *gin.Context) {
 	c.taskService.Create(&task)
 	ctx.JSON(http.StatusCreated, task)
 }
+
+func (c *TaskController) Get(ctx *gin.Context) {
+	pageQuery := ctx.Query("page")
+	perPageQuery := ctx.Query("perPage")
+	sortBy := ctx.Query("sortBy")
+	sortDirection := ctx.Query("sortDirection")
+	filter := ctx.Query("filter")
+	status := ctx.Query("status")
+
+	page, _ := strconv.Atoi(pageQuery)
+	perPage, _ := strconv.Atoi(perPageQuery)
+
+	result := c.taskService.Get(page, perPage, sortBy, sortDirection, filter, status)
+
+	ctx.JSON(http.StatusOK, result)
+}
