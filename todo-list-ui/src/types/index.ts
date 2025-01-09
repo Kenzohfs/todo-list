@@ -6,10 +6,14 @@ export type Workspace = {
   name: string;
 }
 
+export type WorkspaceModel = {
+  name: string;
+}
+
 export enum TaskStatus {
-  NotStarted,
-  InProgress,
-  Finished,
+  NotStarted = "NotStarted",
+  InProgress = "InProgress",
+  Finished = "Done",
 }
 
 export type Task = {
@@ -19,4 +23,9 @@ export type Task = {
   DeletedAt: string | null;
   desc: string;
   status: TaskStatus;
+}
+
+export type TaskModel = {
+  desc: string;
+  status: TaskStatus
 }
