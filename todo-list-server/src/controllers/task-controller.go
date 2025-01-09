@@ -74,7 +74,7 @@ func (c *TaskController) Get(ctx *gin.Context) {
 	page, _ := strconv.Atoi(pageQuery)
 	perPage, _ := strconv.Atoi(perPageQuery)
 
-	result := c.taskService.Get(page, perPage, sortBy, sortDirection, filter, status)
+	result := c.taskService.Get(id, page, perPage, sortBy, sortDirection, filter, status)
 
 	ctx.JSON(http.StatusOK, result)
 }

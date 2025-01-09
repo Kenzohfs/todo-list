@@ -13,10 +13,10 @@ func NewTaskRepo(db *gorm.DB) *TaskRepo {
 	return &TaskRepo{db: db}
 }
 
-func (r *TaskRepo) Get(page int, perPage int, sortBy string, sortDirection string, filter string, status string) *[]models.Task {
+func (r *TaskRepo) Get(workspaceId int, page int, perPage int, sortBy string, sortDirection string, filter string, status string) *[]models.Task {
 	var tasks []models.Task
 
-	query := r.db.Order(`"` + sortBy + `"` + " " + sortDirection).Limit(perPage).Offset(page * perPage)
+	query := r.db.Order(`"`+sortBy+`"`+" "+sortDirection).Limit(perPage).Offset(page*perPage).Where("workspace_id = ?", workspaceId)
 
 	if filter != "" {
 		query.Where(`"desc" LIKE ?`, "%"+filter+"%")
